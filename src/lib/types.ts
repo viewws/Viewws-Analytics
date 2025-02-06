@@ -142,12 +142,43 @@ export interface WebsitePageviews {
   };
 }
 
+export interface WebsiteAllStats {
+  date: string;
+  pageviews: number;
+  sessions: number;
+  clicks: number;
+}
+
+export interface LinkEventMetric {
+  event: string;
+  link_url: string;
+  clicks: number;
+}
+
+export interface LinkClicks {
+  customLinkClicks: Array<{ x: string; y: number }>;
+  socialLinkClicks: Array<{ x: string; y: number }>;
+}
+
 export interface WebsiteStats {
   pageviews: { value: number; prev: number };
   visitors: { value: number; prev: number };
   visits: { value: number; prev: number };
   bounces: { value: number; prev: number };
   totalTime: { value: number; prev: number };
+}
+
+export interface WebsiteStatsByDay {
+  day: string;
+  pageviews: number;
+  visitors: number;
+  visits: number;
+  bounces: number;
+  totaltime: number;
+}
+export interface WebsiteStatsByDayResponse {
+  current: WebsiteStatsByDay[];
+  previous: WebsiteStatsByDay[];
 }
 
 export interface DateRange {
