@@ -131,6 +131,21 @@ function mapFilter(column: string, operator: string, name: string, type: string 
   const like = db === POSTGRESQL ? 'ilike' : 'like';
   const value = `{{${name}${type ? `::${type}` : ''}}}`;
 
+  if (name === 'url') {
+    switch (operator) {
+      case OPERATORS.equals:
+        return db === POSTGRESQL
+          ? `LOWER(${column}) = LOWER(${value})` // PostgreSQL case-insensitive match
+          : `lowerUTF8(${column}) = lowerUTF8(${value})`; // ClickHouse case-insensitive match
+      case OPERATORS.contains:
+        return db === POSTGRESQL
+          ? `LOWER(${column}) ${like} LOWER(${value})` // PostgreSQL ILIKE
+          : `lowerUTF8(${column}) LIKE lowerUTF8(${value})`; // ClickHouse LIKE
+      default:
+        return '';
+    }
+  }
+
   switch (operator) {
     case OPERATORS.equals:
       return `${column} = ${value}`;
