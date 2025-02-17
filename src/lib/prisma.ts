@@ -135,12 +135,12 @@ function mapFilter(column: string, operator: string, name: string, type: string 
     switch (operator) {
       case OPERATORS.equals:
         return db === POSTGRESQL
-          ? `LOWER(${column}) = LOWER(${value})` // PostgreSQL case-insensitive match
-          : `lowerUTF8(${column}) = lowerUTF8(${value})`; // ClickHouse case-insensitive match
+          ? `LOWER(${column}) = LOWER(${value})`
+          : `lowerUTF8(${column}) = lowerUTF8(${value})`;
       case OPERATORS.contains:
         return db === POSTGRESQL
-          ? `LOWER(${column}) ${like} LOWER(${value})` // PostgreSQL ILIKE
-          : `lowerUTF8(${column}) LIKE lowerUTF8(${value})`; // ClickHouse LIKE
+          ? `LOWER(${column}) ${like} LOWER(${value})`
+          : `lowerUTF8(${column}) LIKE lowerUTF8(${value})`;
       default:
         return '';
     }
