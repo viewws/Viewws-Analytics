@@ -131,6 +131,21 @@ function mapFilter(column: string, operator: string, name: string, type: string 
   const like = db === POSTGRESQL ? 'ilike' : 'like';
   const value = `{{${name}${type ? `::${type}` : ''}}}`;
 
+  if (name === 'url') {
+    switch (operator) {
+      case OPERATORS.equals:
+        return db === POSTGRESQL
+          ? `LOWER(${column}) = LOWER(${value})`
+          : `lowerUTF8(${column}) = lowerUTF8(${value})`;
+      case OPERATORS.contains:
+        return db === POSTGRESQL
+          ? `LOWER(${column}) ${like} LOWER(${value})`
+          : `lowerUTF8(${column}) LIKE lowerUTF8(${value})`;
+      default:
+        return '';
+    }
+  }
+
   switch (operator) {
     case OPERATORS.equals:
       return `${column} = ${value}`;
